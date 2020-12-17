@@ -1,4 +1,4 @@
-module github.com/M4cs/goaly
+module github.com/M4cs/aly
 
 go 1.14
 
