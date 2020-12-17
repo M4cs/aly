@@ -2,18 +2,18 @@
 
 Aly offers the simplest way to manage, share, and obtain command line aliases!
 
-# Table of Contents
+## Table of Contents
 
-## I. [Features](https://github.com/M4cs/aly#features)
-## II. [Installation](https://github.com/M4cs/aly#installation)
-## III. [Usage](https://github.com/M4cs/aly#usage)
-  ### a. [Installing A Plugin](https://github.com/M4cs/aly#installing-a-plugin)
-  ### b. [Enabling/Disabling Plugins](https://github.com/M4cs/aly#enablingdisabling-plugins)
-  ### c. [Updating Plugins](https://github.com/M4cs/aly#update-plugins)
-  ### d. [Listing Plugins](https://github.com/M4cs/aly#see-all-installed-plugins)
-  ### e. [See Plugin Info](https://github.com/M4cs/aly#see-plugin-info)
-  ### f. [Deleting Plugins](https://github.com/M4cs/aly#delete-a-plugin-completely)
-## IV. [Creating Plugins](https://github.com/M4cs/aly#creating-a-plugin)
+### I. [Features](https://github.com/M4cs/aly#features)
+### II. [Installation](https://github.com/M4cs/aly#installation)
+### III. [Usage](https://github.com/M4cs/aly#usage)
+  #### a. [Installing A Plugin](https://github.com/M4cs/aly#installing-a-plugin)
+  #### b. [Enabling/Disabling Plugins](https://github.com/M4cs/aly#enablingdisabling-plugins)
+  #### c. [Updating Plugins](https://github.com/M4cs/aly#update-plugins)
+  #### d. [Listing Plugins](https://github.com/M4cs/aly#see-all-installed-plugins)
+  #### e. [See Plugin Info](https://github.com/M4cs/aly#see-plugin-info)
+  #### f. [Deleting Plugins](https://github.com/M4cs/aly#delete-a-plugin-completely)
+### IV. [Creating Plugins](https://github.com/M4cs/aly#creating-a-plugin)
 ## V. [Adding an Official Plugin](https://github.com/M4cs/aly#adding-your-plugin-to-the-official-repository)
 
 ## Features
