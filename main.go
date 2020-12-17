@@ -39,7 +39,7 @@ func main() {
 		}
 	}
 	if *update != "" {
-		err := config.updatePlugin(*update)
+		err := config.updatePlugin(*update, *localFile)
 		if err != nil {
 			log.Fatal(err)
 		}

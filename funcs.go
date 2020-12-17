@@ -103,36 +103,67 @@ func (config Config) updateAllPlugins() (err error) {
 	return nil
 }
 
-func (config Config) updatePlugin(name string) (err error) {
-	client := &http.Client{Timeout: 10 * time.Second}
-	for i, plugin := range config.DisabledPlugins {
-		if plugin.Name == name {
-			res, err := client.Get(plugin.URL)
-			if err != nil {
-				return err
+func (config Config) updatePlugin(name string, isLocal bool) (err error) {
+	if !isLocal {
+		client := &http.Client{Timeout: 10 * time.Second}
+		for i, plugin := range config.DisabledPlugins {
+			if plugin.Name == name {
+				res, err := client.Get(plugin.URL)
+				if err != nil {
+					return err
+				}
+				defer res.Body.Close()
+				var pl Plugin
+				json.NewDecoder(res.Body).Decode(&pl)
+				if (semver.Compare(plugin.Version, pl.Version)) == -1 {
+					config.DisabledPlugins[i] = pl
+					config.updateJSON()
+					return nil
+				}
 			}
-			defer res.Body.Close()
-			var pl Plugin
-			json.NewDecoder(res.Body).Decode(&pl)
-			if (semver.Compare(plugin.Version, pl.Version)) == -1 {
-				config.DisabledPlugins[i] = pl
-				config.updateJSON()
+		}
+		for i, plugin := range config.EnabledPlugins {
+			if plugin.Name == name {
+				res, err := client.Get(plugin.URL)
+				if err != nil {
+					return err
+				}
+				defer res.Body.Close()
+				var pl Plugin
+				json.NewDecoder(res.Body).Decode(&pl)
+				if (semver.Compare(plugin.Version, pl.Version)) == -1 {
+					config.EnabledPlugins[i] = pl
+					config.updateJSON()
+					return nil
+				}
+			}
+		}
+	} else {
+		file, err := ioutil.ReadFile(name)
+		if err != nil {
+			return err
+		}
+		var pl Plugin
+		json.Unmarshal(file, &pl)
+		for i, plugin := range config.DisabledPlugins {
+			if plugin.Name == pl.Name {
+				if (semver.Compare(plugin.Version, pl.Version)) == -1 {
+					config.DisabledPlugins[i] = pl
+					config.updateJSON()
+					return nil
+				}
+				fmt.Println("Up to date!")
 				return nil
 			}
 		}
-	}
-	for i, plugin := range config.EnabledPlugins {
-		if plugin.Name == name {
-			res, err := client.Get(plugin.URL)
-			if err != nil {
-				return err
-			}
-			defer res.Body.Close()
-			var pl Plugin
-			json.NewDecoder(res.Body).Decode(&pl)
-			if (semver.Compare(plugin.Version, pl.Version)) == -1 {
-				config.EnabledPlugins[i] = pl
-				config.updateJSON()
+		for i, plugin := range config.EnabledPlugins {
+			if plugin.Name == pl.Name {
+				if (semver.Compare(plugin.Version, pl.Version)) == -1 {
+					config.EnabledPlugins[i] = pl
+					config.updateJSON()
+					return nil
+				}
+				fmt.Println("Up to date!")
 				return nil
 			}
 		}
@@ -241,12 +272,19 @@ func (config Config) alyStatus() (err error) {
 func (config Config) pluginInfo(name string) (err error) {
 	for _, plugin := range config.EnabledPlugins {
 		if plugin.Name == name {
-			fmt.Println("Name: " + plugin.Name)
+			fmt.Println("\nName: " + plugin.Name)
 			fmt.Println("Version: " + plugin.Version)
 			fmt.Println("Description: " + plugin.Description)
 			fmt.Println("Author: " + plugin.Author)
 			fmt.Println("URL: " + plugin.URL)
 			fmt.Println("Enabled: TRUE")
+			fmt.Println("\nAliases:")
+			for _, alias := range plugin.AliasMap {
+				fmt.Println(alias.Name + " = " + alias.Command)
+				for sn, sc := range alias.Subalias {
+					fmt.Println(alias.Name + sn + " = " + alias.Command + " " + sc)
+				}
+			}
 		}
 	}
 	for _, plugin := range config.DisabledPlugins {
@@ -257,6 +295,13 @@ func (config Config) pluginInfo(name string) (err error) {
 			fmt.Println("Author: " + plugin.Author)
 			fmt.Println("URL: " + plugin.URL)
 			fmt.Println("Enabled: FALSE")
+			fmt.Println("\nAliases:")
+			for _, alias := range plugin.AliasMap {
+				fmt.Println(alias.Name + " = " + alias.Command)
+				for sn, sc := range alias.Subalias {
+					fmt.Println(alias.Name + sn + " = " + alias.Command + " " + sc)
+				}
+			}
 		}
 	}
 	return nil
@@ -294,11 +339,12 @@ func (config Config) loadPlugins() (err error) {
 			if len(alias.Subalias) > 0 {
 				for saAlias, saCommand := range alias.Subalias {
 					newAlias := parent + saAlias
+					newCommand := command + " " + saCommand
 					_, found = find(loadedAliases, newAlias)
 					if found {
 						fmt.Println("[aly] Not loading " + plugin.Name + "'s subalias: '" + parent + "'. It was already found in another plugin!")
 					} else {
-						err := addAlias(newAlias, saCommand, f)
+						err := addAlias(newAlias, newCommand, f)
 						if err != nil {
 							return err
 						}
