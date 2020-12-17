@@ -10,26 +10,26 @@ type Alias struct {
 
 // Plugin struct hold all of the information for each plugin and their aliases
 type Plugin struct {
-	Name       string  `json:"plugin_name"` // Name of the plugin
-	Author     string  `json:"author"`      // Author of the plugin
-	Repository string  `json:"repository"`  // Repository of plugin
-	Version    string  `json:"version"`     // Version of plugin
-	AliasMap   []Alias `json:"alias_map"`   // AliasMap of the aliases for plugin
+	Name        string  `json:"plugin_name"` // Name of the plugin
+	Author      string  `json:"author"`      // Author of the plugin
+	URL         string  `json:"url"`         // Repository of plugin
+	Version     string  `json:"version"`     // Version of plugin
+	AliasMap    []Alias `json:"alias_map"`   // AliasMap of the aliases for plugin
+	Description string  `json:"description"` // Description of the plugin
 }
 
 // Config for aly
 type Config struct {
-	Version               string   `json:"aly_version"`
-	ShouldCheckForUpdates bool     `json:"check_for_updates"`
-	EnabledPlugins        []Plugin `json:"enabled_plugins"`
-	DisabledPlugins       []Plugin `json:"disabled_plugins"`
+	Version         string   `json:"aly_version"`
+	EnabledPlugins  []Plugin `json:"enabled_plugins"`
+	DisabledPlugins []Plugin `json:"disabled_plugins"`
 }
 
 func createConfig() (config Config) {
 	config = Config{
-		Version:               "1.0.0",
-		ShouldCheckForUpdates: true,
-		EnabledPlugins:        nil,
+		Version:         "1.0.0",
+		EnabledPlugins:  []Plugin{},
+		DisabledPlugins: []Plugin{},
 	}
 	return config
 }

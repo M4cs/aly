@@ -1,8 +1,9 @@
 {
 	"plugin_name": "Example Plugin",
 	"author": "github/M4cs",
-	"repository": "https://github.com/M4cs/alias_plugin",
-	"version": "1.0.0",
+	"url": "https://github.com/M4cs/alias_plugin/plugin.json",
+    "version": "1.0.0",
+    "description": "An example plugin",
 	"alias_map": [
         { 
             "alias": "gc",
