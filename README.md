@@ -2,6 +2,20 @@
 
 Aly offers the simplest way to manage, share, and obtain command line aliases!
 
+# Table of Contents
+
+## I. [Features](https://github.com/M4cs/aly#features)
+## II. [Installation](https://github.com/M4cs/aly#installation)
+## III. [Usage](https://github.com/M4cs/aly#usage)
+  ### a. [Installing A Plugin](https://github.com/M4cs/aly#installing-a-plugin)
+  ### b. [Enabling/Disabling Plugins](https://github.com/M4cs/aly#enablingdisabling-plugins)
+  ### c. [Updating Plugins](https://github.com/M4cs/aly#update-plugins)
+  ### d. [Listing Plugins](https://github.com/M4cs/aly#see-all-installed-plugins)
+  ### e. [See Plugin Info](https://github.com/M4cs/aly#see-plugin-info)
+  ### f. [Deleting Plugins](https://github.com/M4cs/aly#delete-a-plugin-completely)
+## IV. [Creating Plugins](https://github.com/M4cs/aly#creating-a-plugin)
+## V. [Adding an Official Plugin](https://github.com/M4cs/aly#adding-your-plugin-to-the-official-repository)
+
 ## Features
 
 - Aliases shared, loaded, and stored as JSON files for easy customization and readability
@@ -35,7 +49,7 @@ aly -a '/path/to/plugin.json' -f
 aly -e 'Plugin Name'
 ```
 
-### Enabling/Disable Plugins
+### Enabling/Disabling Plugins
 
 ```
 # Enable
@@ -76,7 +90,7 @@ aly -p 'Plugin Name'
 aly -r 'Plugin Name'
 ```
 
-# Creating a Plugin
+## Creating a Plugin
 
 All plugins are in the JSON format. You can create a plugin very easily using the below formatting.
 
@@ -126,7 +140,7 @@ Using the JSON example above:
 - `echw` will run `echo 'hello, world!'`
 - `eca` will run `echo $1` using whatever argument you send to it (or Windows equivalent)
 
-# Adding Your Plugin To The Official Repository
+## Adding Your Plugin To The Official Repository
 
 You should add a folder with your username into `./official_plugins/`. For example, I'd add `./official_plugins/M4cs/`. Inside of this folder, you will add your different plugins using `.json` files. You should include a `README.md` with some information about what your plugin(s) offer!
 
