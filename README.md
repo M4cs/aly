@@ -6,6 +6,8 @@
 
 Aly offers the simplest way to manage, share, and obtain command line aliases!
 
+Warning: This project is still in early development. Minimal testing has been done on Windows!
+
 ### Table of Contents
 
 #### I. [Features](https://github.com/M4cs/aly#features)
