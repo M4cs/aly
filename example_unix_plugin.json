@@ -1,7 +1,7 @@
 {
 	"plugin_name": "Default Git Plugin Pack - Non-Windows",
 	"author": "github/M4cs",
-	"url": "https://raw.githubusercontent.com/M4cs/goaly/master/unix_plugin.json",
+	"url": "https://raw.githubusercontent.com/M4cs/goaly/master/example_unix_plugin.json",
     "version": "1.0.0",
     "description": "An example plugin",
 	"alias_map": [

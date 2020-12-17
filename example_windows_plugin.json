@@ -1,9 +1,9 @@
 {
-	"plugin_name": "Default Git Plugin Pack - Non-Windows",
+	"plugin_name": "Default Git Plugin Pack - Windows",
 	"author": "github/M4cs",
-	"url": "https://raw.githubusercontent.com/M4cs/goaly/master/unix_plugin.json",
+	"url": "https://raw.githubusercontent.com/M4cs/goaly/master/example_windows_plugin.json",
     "version": "1.0.0",
-    "description": "An example plugin",
+    "description": "An example plugin for Windows",
 	"alias_map": [
         { 
             "alias": "gc",
@@ -29,7 +29,7 @@
             "description": "Aliases for Git Submodule Foreach",
             "subalias": {
                 "p": "git pull",
-                "c": "git checkout $1",
+                "c": "git checkout %1",
                 "r": "git reset --hard"
             }
         },
