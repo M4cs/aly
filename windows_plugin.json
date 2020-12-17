@@ -1,0 +1,42 @@
+{
+	"plugin_name": "Default Git Plugin Pack - Non-Windows",
+	"author": "github/M4cs",
+	"url": "https://raw.githubusercontent.com/M4cs/goaly/master/unix_plugin.json",
+    "version": "1.0.0",
+    "description": "An example plugin",
+	"alias_map": [
+        { 
+            "alias": "gc",
+            "command": "git checkout",
+            "description": "Aliases for Git Checkout",
+            "subalias": {
+                "d": "development",
+                "m": "master"
+            }
+        },
+        { 
+            "alias": "gp",
+            "command": "git pull",
+            "description": "Aliases for Git Pull",
+            "subalias": {
+                "d": "origin development",
+                "m": "origin master"
+            }
+        },
+        { 
+            "alias": "gsf",
+            "command": "git submodule foreach",
+            "description": "Aliases for Git Submodule Foreach",
+            "subalias": {
+                "p": "git pull",
+                "c": "git checkout $1",
+                "r": "git reset --hard"
+            }
+        },
+        { 
+            "alias": "ginit",
+            "command": "git init; git add .; git commit -m \"Initial Commit\"",
+            "description": "Shortcut for Git Init & Adding Files"
+        }
+    ]
+}
