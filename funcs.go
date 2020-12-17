@@ -11,6 +11,15 @@ import (
 	"golang.org/x/mod/semver"
 )
 
+func find(slice []string, val string) (int, bool) {
+	for i, item := range slice {
+		if item == val {
+			return i, true
+		}
+	}
+	return -1, false
+}
+
 func (config Config) updateAllPlugins() (err error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 	allPlugins := config.allPlugins()
@@ -35,13 +44,13 @@ func (config Config) updateAllPlugins() (err error) {
 			for i, pl := range config.DisabledPlugins {
 				if pl.Name == plugin.Name {
 					config.DisabledPlugins[i] = plugin
-					continue
+					break
 				}
 			}
 			for i, pl := range config.EnabledPlugins {
 				if pl.Name == plugin.Name {
 					config.EnabledPlugins[i] = plugin
-					continue
+					break
 				}
 			}
 		}
@@ -117,6 +126,7 @@ func (config Config) enablePlugin(name string) (err error) {
 			config.DisabledPlugins = append(config.DisabledPlugins[:i], config.DisabledPlugins[i+1:]...)
 			config.EnabledPlugins = append(config.EnabledPlugins, plugin)
 			config.updateJSON()
+			fmt.Println("Enabled Plugin: " + plugin.Name)
 			return nil
 		}
 	}
@@ -129,6 +139,7 @@ func (config Config) disablePlugin(name string) (err error) {
 			config.EnabledPlugins = append(config.EnabledPlugins[:i], config.EnabledPlugins[i+1:]...)
 			config.DisabledPlugins = append(config.DisabledPlugins, plugin)
 			config.updateJSON()
+			fmt.Println("Disabled Plugin: " + plugin.Name)
 			return nil
 		}
 	}
@@ -210,5 +221,37 @@ func (config Config) pluginInfo(name string) (err error) {
 }
 
 func (config Config) loadPlugins() (err error) {
+	var loadedAliases []string
+	for _, plugin := range config.EnabledPlugins {
+		for _, alias := range plugin.AliasMap {
+			parent := alias.Name
+			_, found := find(loadedAliases, parent)
+			if found {
+				fmt.Println("[aly] Not loading " + plugin.Name + "... alias '" + parent + "' already found in another plugin!")
+				continue
+			}
+			command := alias.Command
+			err := addAlias(parent, command)
+			loadedAliases = append(loadedAliases, parent)
+			if err != nil {
+				return err
+			}
+			if len(alias.Subalias) > 0 {
+				for saAlias, saCommand := range alias.Subalias {
+					newAlias := parent + saAlias
+					_, found = find(loadedAliases, newAlias)
+					if found {
+						fmt.Println("[aly] Not loading " + plugin.Name + "'s subalias: '" + parent + "'. It was already found in another plugin!")
+					} else {
+						err := addAlias(newAlias, saCommand)
+						if err != nil {
+							return err
+						}
+						loadedAliases = append(loadedAliases, newAlias)
+					}
+				}
+			}
+		}
+	}
 	return nil
 }
