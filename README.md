@@ -1,5 +1,5 @@
 <p align="center">
-    <a align="center"><img src="https://raw.githubusercontent.com/M4cs/aly/master/ally-logo.png"></a>
+    <a align="center"><img src="https://raw.githubusercontent.com/M4cs/aly/master/aly-logo.png"></a>
 </p>
 
 # aly - Command Line Alias Manager and Packager
