@@ -38,7 +38,14 @@ go get -u github.com/M4cs/aly
 go install github.com/M4cs/aly
 ```
 
-Next, run `aly -h` to see available options.
+Next, add this to your shell's profile:
+
+```
+aly -l
+source ~/.alyases
+```
+
+See below for usage information!
 
 ## Usage
 
