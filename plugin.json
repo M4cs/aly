@@ -1,0 +1,18 @@
+{
+	"plugin_name": "Example Plugin",
+	"author": "github/M4cs",
+	"repository": "https://github.com/M4cs/alias_plugin",
+	"version": "1.0.0",
+	"alias_map": [
+        { 
+            "alias": "gc",
+            "command": "git checkout",
+            "description": "Aliases for Git Checkout",
+            "subalias": {
+                "d": "development",
+                "m": "master",
+                "t": "test"
+            }
+		}
+    ]
+}
