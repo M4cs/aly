@@ -6,7 +6,7 @@
     "description": "An example plugin",
 	"alias_map": [
         { 
-            "alias": "gc",
+            "alias": "gctest",
             "command": "git checkout",
             "description": "Aliases for Git Checkout",
             "subalias": {

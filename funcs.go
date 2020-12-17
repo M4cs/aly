@@ -6,10 +6,52 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"os/exec"
+	"path"
+	"runtime"
 	"time"
 
 	"golang.org/x/mod/semver"
 )
+
+func addAlias(aliasName string, command string, f *os.File) (err error) {
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("doskey", aliasName+"="+command)
+		if err = cmd.Run(); err != nil {
+			return err
+		}
+	} else {
+		if _, err := f.Write([]byte("alias " + aliasName + "='" + command + "'\n")); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (config Config) clearEmpties() (err error) {
+	if runtime.GOOS == "windows" {
+		for _, plugin := range config.DisabledPlugins {
+			for _, am := range plugin.AliasMap {
+				parent := am.Name
+				cmd := exec.Command("doskey", parent+"=")
+				if err = cmd.Run(); err != nil {
+					return err
+				}
+				if len(am.Subalias) > 0 {
+					for saName := range am.Subalias {
+						cmd := exec.Command("doskey", parent+saName+"=")
+						if err = cmd.Run(); err != nil {
+							return err
+						}
+					}
+				}
+			}
+
+		}
+	}
+	return nil
+}
 
 func find(slice []string, val string) (int, bool) {
 	for i, item := range slice {
@@ -221,6 +263,19 @@ func (config Config) pluginInfo(name string) (err error) {
 }
 
 func (config Config) loadPlugins() (err error) {
+	usrHD, err := os.UserHomeDir()
+	var f *os.File
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(path.Join(usrHD, "/.alyases")); !os.IsNotExist(err) {
+		os.Remove(path.Join(usrHD, "/.alyases"))
+	}
+	f, err = os.OpenFile(path.Join(usrHD, "/.alyases"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	config.clearEmpties()
 	var loadedAliases []string
 	for _, plugin := range config.EnabledPlugins {
 		for _, alias := range plugin.AliasMap {
@@ -231,7 +286,7 @@ func (config Config) loadPlugins() (err error) {
 				continue
 			}
 			command := alias.Command
-			err := addAlias(parent, command)
+			err := addAlias(parent, command, f)
 			loadedAliases = append(loadedAliases, parent)
 			if err != nil {
 				return err
@@ -243,7 +298,7 @@ func (config Config) loadPlugins() (err error) {
 					if found {
 						fmt.Println("[aly] Not loading " + plugin.Name + "'s subalias: '" + parent + "'. It was already found in another plugin!")
 					} else {
-						err := addAlias(newAlias, saCommand)
+						err := addAlias(newAlias, saCommand, f)
 						if err != nil {
 							return err
 						}
@@ -252,6 +307,9 @@ func (config Config) loadPlugins() (err error) {
 				}
 			}
 		}
+	}
+	if err := f.Close(); err != nil {
+		return err
 	}
 	return nil
 }

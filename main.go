@@ -33,30 +33,57 @@ func main() {
 		log.Fatal(err)
 	}
 	if *updateall {
-		config.updateAllPlugins()
+		err := config.updateAllPlugins()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *update != "" {
-		config.updatePlugin(*update)
+		err := config.updatePlugin(*update)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *remove != "" {
-		config.removePlugin(*remove)
+		err := config.removePlugin(*remove)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *info {
-		config.alyStatus()
+		err := config.alyStatus()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *pluginInfo != "" {
-		config.pluginInfo(*pluginInfo)
+		err := config.pluginInfo(*pluginInfo)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *add != "" {
-		config.addPlugin(*add, *localFile)
+		err := config.addPlugin(*add, *localFile)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *enable != "" {
-		config.enablePlugin(*enable)
+		err := config.enablePlugin(*enable)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *disable != "" {
-		config.disablePlugin(*disable)
+		err := config.disablePlugin(*disable)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	if *load {
-		config.loadPlugins()
+		err := config.loadPlugins()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
