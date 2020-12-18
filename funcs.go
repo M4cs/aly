@@ -324,31 +324,48 @@ func (config Config) loadPlugins() (err error) {
 	var loadedAliases []string
 	for _, plugin := range config.EnabledPlugins {
 		for _, alias := range plugin.AliasMap {
-			parent := alias.Name
-			_, found := find(loadedAliases, parent)
-			if found {
-				fmt.Println("[aly] Not loading " + plugin.Name + "... alias '" + parent + "' already found in another plugin!")
-				continue
+			shouldAdd := false
+			if alias.Platform != "" {
+				if runtime.GOOS == "windows" && (alias.Platform == "windows" || alias.Platform == "*") {
+					shouldAdd = true
+				}
+				if runtime.GOOS != "windows" && (alias.Platform != "windows" || alias.Platform == "*") {
+					shouldAdd = true
+				}
+				if runtime.GOOS == alias.Platform {
+					shouldAdd = true
+				}
+				if alias.Platform != "windows" && alias.Platform != "unix" && alias.Platform == runtime.GOOS {
+					shouldAdd = true
+				}
 			}
-			command := alias.Command
-			err := addAlias(parent, command, f)
-			loadedAliases = append(loadedAliases, parent)
-			if err != nil {
-				return err
-			}
-			if len(alias.Subalias) > 0 {
-				for saAlias, saCommand := range alias.Subalias {
-					newAlias := parent + saAlias
-					newCommand := command + " " + saCommand
-					_, found = find(loadedAliases, newAlias)
-					if found {
-						fmt.Println("[aly] Not loading " + plugin.Name + "'s subalias: '" + parent + "'. It was already found in another plugin!")
-					} else {
-						err := addAlias(newAlias, newCommand, f)
-						if err != nil {
-							return err
+			if shouldAdd {
+				parent := alias.Name
+				_, found := find(loadedAliases, parent)
+				if found {
+					fmt.Println("[aly] Not loading " + plugin.Name + "... alias '" + parent + "' already found in another plugin!")
+					continue
+				}
+				command := alias.Command
+				err := addAlias(parent, command, f)
+				loadedAliases = append(loadedAliases, parent)
+				if err != nil {
+					return err
+				}
+				if len(alias.Subalias) > 0 {
+					for saAlias, saCommand := range alias.Subalias {
+						newAlias := parent + saAlias
+						newCommand := command + " " + saCommand
+						_, found = find(loadedAliases, newAlias)
+						if found {
+							fmt.Println("[aly] Not loading " + plugin.Name + "'s subalias: '" + parent + "'. It was already found in another plugin!")
+						} else {
+							err := addAlias(newAlias, newCommand, f)
+							if err != nil {
+								return err
+							}
+							loadedAliases = append(loadedAliases, newAlias)
 						}
-						loadedAliases = append(loadedAliases, newAlias)
 					}
 				}
 			}

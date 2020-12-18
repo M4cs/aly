@@ -6,6 +6,7 @@ type Alias struct {
 	Command     string            `json:"command"`     // Command is the command to execute
 	Description string            `json:"description"` // Description of the commands and subcommands
 	Subalias    map[string]string `json:"subalias"`    // Subalias are the subaliases of the parent alias
+	Platform    string            `json:"platform"`
 }
 
 // Plugin struct hold all of the information for each plugin and their aliases
