@@ -49,3 +49,12 @@ func (config Config) allPlugins() (plugins []Plugin) {
 	plugins = append(config.DisabledPlugins, config.EnabledPlugins...)
 	return plugins
 }
+
+func createConfig() (config Config) {
+	config = Config{
+		Version:         "1.1.0",
+		EnabledPlugins:  []Plugin{},
+		DisabledPlugins: []Plugin{},
+	}
+	return config
+}

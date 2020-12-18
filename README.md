@@ -118,6 +118,7 @@ All plugins are in the JSON format. You can create a plugin very easily using th
             "alias": "ec",
             "description": "Example Alias",
             "command": "echo",
+            "platform": "*",
             "subalias": {
                 "t": "'testing'",
                 "hw": "'hello, world!'",
@@ -135,7 +136,7 @@ All plugins are in the JSON format. You can create a plugin very easily using th
 - **description** - A small description about your plugin
 - **version** - Version number for plugin. This should be semantic syntax.
 - **aliasmap** - Your map of aliase groups for the plugin.
-
+- **platform** - Refers to the platform that the alias will work on. Supports: `windows`, `unix`, `*`, or any [GOOS](https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63) platforms.
 
 #### aliasmap
 
