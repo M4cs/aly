@@ -25,12 +25,3 @@ type Config struct {
 	EnabledPlugins  []Plugin `json:"enabled_plugins"`
 	DisabledPlugins []Plugin `json:"disabled_plugins"`
 }
-
-func createConfig() (config Config) {
-	config = Config{
-		Version:         "1.0.0",
-		EnabledPlugins:  []Plugin{},
-		DisabledPlugins: []Plugin{},
-	}
-	return config
-}
